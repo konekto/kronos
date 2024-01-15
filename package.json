@@ -1,0 +1,17 @@
+{
+  "name": "cron-bun",
+  "module": "index.ts",
+  "devDependencies": {
+    "@types/sinon": "^17.0.3",
+    "bun-types": "latest",
+    "sinon": "^17.0.1"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "type": "module",
+  "dependencies": {
+    "@kitajs/html": "^3.0.10",
+    "cron": "^3.1.6"
+  }
+}
