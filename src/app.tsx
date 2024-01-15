@@ -1,7 +1,17 @@
 import Html from "@kitajs/html";
+import Jobs from "./components/jobs";
+import { getAllJobsWithHistory } from "./jobs";
 
-export function app(req: Request) {
-  return render(<h1>Hello</h1>);
+export async function app(req: Request) {
+  const url = new URL(req.url);
+
+  if (url.pathname === "/") {
+    const jobs = await getAllJobsWithHistory();
+    console.log(jobs);
+    return render(<Jobs jobs={jobs} />);
+  }
+
+  return new Response("");
 }
 
 function render(jsx: any) {

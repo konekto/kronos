@@ -1,0 +1,8 @@
+NAME test 1
+CRON * * * * *
+GET https://google.com
+
+
+NAME test 2
+CRON * * * * *
+GET https://google.com
