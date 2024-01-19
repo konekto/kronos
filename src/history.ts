@@ -2,6 +2,7 @@ import { Database, Statement } from "bun:sqlite";
 
 let insertQuery: Statement<any, any>;
 let getQuery: Statement<any, any>;
+let countQuery: Statement<any, any>;
 
 let initialized = false;
 
@@ -27,7 +28,10 @@ export function init(path = "history.sqlite") {
   insertQuery = d.query(
     `insert into jobs_history (job_name, triggered_at, response_ok, response_status, response_text) values ($job_name, $triggered_at, $response_ok, $response_status, $response_text);`
   );
-  getQuery = d.query("select * from jobs_history where job_name = ? limit ?;");
+  getQuery = d.query(
+    "select * from jobs_history where job_name = ? ORDER BY triggered_at DESC LIMIT ? OFFSET ?;"
+  );
+  countQuery = d.query("select COUNT(*) from jobs_history");
 
   initialized = true;
 
@@ -38,7 +42,7 @@ export function truncate() {
   db.run("delete from jobs_history;");
 }
 
-type JobHistory = {
+export type JobHistory = {
   job_name: string;
   triggered_at: number;
   response_ok: 0 | 1;
@@ -57,7 +61,12 @@ export function insertJobHistory(h: JobHistory) {
   });
 }
 
-export function getJobHistoryByName(name: string, limit = 1000) {
+export function getJobHistoryByName(name: string, limit = 1000, offset = 0) {
   init();
-  return getQuery.all(name, limit) as JobHistory[];
+  const countRow = countQuery.get();
+  const count = countRow["COUNT(*)"];
+
+  const history = getQuery.all(name, limit, offset) as JobHistory[];
+
+  return { history, count };
 }

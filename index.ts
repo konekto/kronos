@@ -1,6 +1,5 @@
-import { app } from "./src/app";
 import { scheduleJobs } from "./src/jobs";
-import Html from "@kitajs/html";
+import { PageProps } from "./src/types/page";
 import { render } from "./src/utils";
 
 scheduleJobs();
@@ -12,13 +11,18 @@ const router = new Bun.FileSystemRouter({
 
 const server = Bun.serve({
   async fetch(req) {
-    let match = router.match(req);
-    if (!match) {
-      return new Response("");
+    let route = router.match(req);
+    if (!route) {
+      throw new Error();
     }
-    let page = await require(match.filePath).default;
+    console.log(route);
 
-    return await page(req);
+    let page = await require(route.filePath).default;
+    if (!page) {
+      return render(`<h1>Problem reading file: ${route.filePath}</h1>`, route);
+    }
+
+    return await page({ request: req, route } satisfies PageProps);
   },
 });
 //Bun.serve({ fetch: app });

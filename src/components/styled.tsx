@@ -56,59 +56,8 @@ export default styled;
 export function useStyle(style: string) {
   hasher.update(style);
   const className = "C" + hasher.digest("hex");
-  const populatedStyles = populateClassPrefix(style, className);
-
-  return [className, populatedStyles] as const;
-}
-
-function populateClassPrefix(style: string, className: string) {
-  let res = style;
-  let i = -1;
-  let lastIndex = -1;
-  let j = 0;
-
-  while (i < res.length) {
-    i = res.indexOf("{", i + 1);
-
-    if (i < 0) {
-      break;
-    }
-
-    if (i === 0) {
-      res = `& ${res}`;
-      i += 2;
-      lastIndex = i;
-      continue;
-    }
-
-    if (i === lastIndex) {
-      break;
-    }
-
-    j = i - 1;
-    while (j >= lastIndex) {
-      if (res[j] === "&") {
-        break;
-      }
-
-      if (res[j] === ";" || res[j] === "}") {
-        res = res.substring(0, j + 1) + "\n& " + res.substring(j + 1);
-        i += 3;
-        lastIndex = i;
-      }
-      j--;
-    }
-  }
-
-  return `.${className} {
-    ${res}
+  const populatedStyles = `.${className} {
+    ${style}
 }`;
-}
-
-function isNative(input: StyledInput): input is ElementName {
-  if (typeof input === "string") {
-    return true;
-  }
-
-  return false;
+  return [className, populatedStyles] as const;
 }

@@ -1,5 +1,6 @@
 import { MatchedRoute } from "bun";
 
-export type Page = {
+export type PageProps = {
   route: MatchedRoute;
+  request: Request;
 };

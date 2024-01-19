@@ -1,6 +1,13 @@
-import { getJobHistoryByName, insertJobHistory } from "./history";
+import { JobHistory, getJobHistoryByName, insertJobHistory } from "./history";
 import { ScheduledJob, schedule } from "./scheduler";
 
+export type Pagination = { count: number; totalPages: number; page: number };
+export type JobWithHistory = ScheduledJob & { history: JobHistory[] };
+export type JobWithPaginatedHistory = ScheduledJob & {
+  history: {
+    data: JobHistory[];
+  } & Pagination;
+};
 export let jobs: ScheduledJob[] = [];
 
 export async function scheduleJobs() {
@@ -13,9 +20,33 @@ export function setJobs(j: ScheduledJob[]) {
 
 export function getAllJobsWithHistory() {
   return jobs.map((j) => {
-    const history = getJobHistoryByName(j.name);
+    const { history } = getJobHistoryByName(j.name);
     return { ...j, history };
   });
+}
+
+export function getAllJobsWithLastTrigger() {
+  return jobs.map((j) => {
+    const { history } = getJobHistoryByName(j.name, 1);
+    return { ...j, history };
+  });
+}
+
+export function getJobsWithPaginatedHistory(name: string, page: number) {
+  const limit = 10;
+  const offset = page - 1 * limit;
+
+  const job = getJobByName(name);
+  const { history, count } = getJobHistoryByName(job.name, limit, offset);
+  return {
+    ...job,
+    history: {
+      data: history,
+      count,
+      totalPages: Math.ceil(count / 15),
+      page,
+    },
+  };
 }
 
 export function startJobByName(name: string) {
