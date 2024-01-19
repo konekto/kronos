@@ -1,8 +1,8 @@
 NAME test 1
 CRON * * * * *
-GET https://google.com
+GET https://konek.to
 
 
 NAME test 2
 CRON * * * * *
-GET https://google.com
+GET https://konek.to

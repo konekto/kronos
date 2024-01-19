@@ -6,16 +6,17 @@ scheduleJobs();
 
 const router = new Bun.FileSystemRouter({
   style: "nextjs",
-  dir: "./pages/",
+  dir: "./src/pages/",
+  assetPrefix: "public/",
 });
 
 const server = Bun.serve({
   async fetch(req) {
     let route = router.match(req);
-    if (!route) {
-      throw new Error();
-    }
     console.log(route);
+    if (!route) {
+      return new Response("Not found", { status: 404 });
+    }
 
     let page = await require(route.filePath).default;
     if (!page) {
@@ -25,6 +26,5 @@ const server = Bun.serve({
     return await page({ request: req, route } satisfies PageProps);
   },
 });
-//Bun.serve({ fetch: app });
 
 console.log(`Running on http://localhost:${server.port}`);

@@ -1,8 +1,7 @@
 import Html from "@kitajs/html";
 import { Children } from "@kitajs/html";
-import { globalStyles, primaryHue } from "./theme";
-import styled from "./styled";
-import colors from "tailwindcss/colors";
+import { globalStyles } from "./theme";
+import { styled, Styles } from "./styled";
 import { MatchedRoute } from "bun";
 
 type LayoutProps = {
@@ -15,28 +14,44 @@ export default function Layout(props: LayoutProps) {
 
   return (
     <>
-      <style>{globalStyles}</style>
-      <Header>Cron</Header>
-      <Main>{children}</Main>
-      <footer> </footer>
+      <head>
+        <title>Cron</title>
+        <style>{globalStyles}</style>
+        <Styles />
+      </head>
+      <body>
+        <Header>
+          <a href="/">
+            <em>Cron</em>
+          </a>
+        </Header>
+        <Main>{children}</Main>
+        <footer> </footer>
+      </body>
     </>
   );
 }
 
 const Main = styled("main")`
-  padding: 30px;
+  padding: 100px 30px;
 `;
 const Header = styled("header")`
-  background: ${colors.white};
-  color: ${colors[primaryHue]["500"]};
+  color: white;
   padding: 10px 20px;
   height: 60px;
   vertical-align: center;
 
-  font-size: 34px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 60px;
-  letter-spacing: -0.68px;
-  box-shadow: 1px 2px 3px 0px ${colors[primaryHue]["100"]};
+  & a {
+    font-size: 80px;
+    font-weight: 700;
+    line-height: 1.1;
+    background: linear-gradient(45deg, #f83a3a 10%, #f13dd4 50%, #7000ff 90%);
+    background-clip: border-box;
+    background-clip: text;
+    padding: 0 5px;
+    -webkit-text-fill-color: transparent;
+    color: #fff;
+    letter-spacing: 1.2px;
+    text-decoration: none;
+  }
 `;

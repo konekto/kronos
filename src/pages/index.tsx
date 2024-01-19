@@ -1,9 +1,9 @@
 import Html from "@kitajs/html";
-import { getAllJobsWithLastTrigger } from "../src/jobs";
-import Jobs from "../src/components/jobs";
-import { getFormDataValue, render } from "../src/utils";
-import { PageProps } from "../src/types/page";
-import { handleJobActions } from "../src/controllers/job-actions";
+import { getAllJobsWithLastTrigger } from "../jobs";
+import Jobs from "../components/jobs";
+import { getFormDataValue, render } from "../utils";
+import { PageProps } from "../types/page";
+import { handleJobActions } from "../controllers/job-actions";
 import { MatchedRoute } from "bun";
 
 export default async function Index({ request, route }: PageProps) {

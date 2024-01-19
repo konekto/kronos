@@ -16,7 +16,6 @@
   "type": "module",
   "dependencies": {
     "@kitajs/html": "^3.0.10",
-    "cron": "^3.1.6",
-    "tailwindcss": "^3.4.1"
+    "cron": "^3.1.6"
   }
 }

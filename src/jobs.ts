@@ -1,7 +1,12 @@
 import { JobHistory, getJobHistoryByName, insertJobHistory } from "./history";
 import { ScheduledJob, schedule } from "./scheduler";
 
-export type Pagination = { count: number; totalPages: number; page: number };
+export type Pagination = {
+  count: number;
+  totalPages: number;
+  page: number;
+  pageSize: number;
+};
 export type JobWithHistory = ScheduledJob & { history: JobHistory[] };
 export type JobWithPaginatedHistory = ScheduledJob & {
   history: {
@@ -43,7 +48,8 @@ export function getJobsWithPaginatedHistory(name: string, page: number) {
     history: {
       data: history,
       count,
-      totalPages: Math.ceil(count / 15),
+      pageSize: limit,
+      totalPages: Math.floor(count / limit) + 1,
       page,
     },
   };

@@ -1,7 +1,5 @@
 import Html, { PropsWithChildren } from "@kitajs/html";
-import colors from "tailwindcss/colors";
-import styled from "./styled";
-import { primaryHue } from "./theme";
+import { styled } from "./styled";
 import type { Pagination } from "../jobs";
 import TablePagination from "./table-pagination";
 
@@ -37,41 +35,40 @@ const Container = styled("div")`
 `;
 
 const T = styled("table")`
-  border-radius: 6px;
   overflow: hidden;
 
   width: 100%;
   border-collapse: collapse;
   margin: 20px 0;
-  box-shadow: 0 4px 6px ${colors.neutral["200"]};
-
-  & thead {
-    border-top-right-radius: 8px;
-    border-top-left-radius: 8px;
-  }
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
 
   & th,
   td {
-    padding: 15px;
+    padding: 18px 20px;
     text-align: left;
     border-radius: 0;
+    color: rgba(180, 188, 208, 0.7);
+    font-size: 14px;
+  }
+
+  th:last-child,
+  td:last-child {
+    text-align: right;
   }
 
   & th {
-    background-color: ${colors[primaryHue]["400"]};
-    color: #fff;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 13px;
   }
 
-  & tr:nth-child(even) {
-    background-color: ${colors.neutral["100"]};
+  & tbody tr:nth-child(odd) {
+    background: rgba(255, 255, 255, 0.01);
   }
 
-  & tr:nth-child(odd) {
-    background-color: ${colors.neutral["50"]};
-  }
-
-  & tr:hover {
-    background-color: ${colors.neutral["200"]};
+  & tbody tr:hover {
+    background: rgba(255, 255, 255, 0.05);
     transition: background-color 0.3s ease-in-out;
   }
 `;

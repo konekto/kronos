@@ -7,32 +7,47 @@ type TemplateStringValue<Props extends Record<string, any>> =
   | string;
 
 type ElementName = keyof JSX.IntrinsicElements;
+
+export function styled<Props extends Record<string, any>>(Markup: ElementName) {
+  return (
+    strings: TemplateStringsArray,
+    ...values: TemplateStringValue<Props>[]
+  ) => generateStyles<Props>(Markup, strings, ...values);
+}
+
+const stylesStore: Record<string, string> = {};
+
+export function Styles() {
+  return (
+    <style>
+      {Object.entries(stylesStore)
+        .map(([className, styles]) => `.${className} {\n${styles}\n}`)
+        .join("\n")}
+    </style>
+  );
+}
+
 type ElementProps = JSX.IntrinsicElements[ElementName];
-type StyledInput = ElementName | JSX.Element;
 
 function generateStyles<Props extends Record<string, any>>(
   InitialComponent: ElementName,
   strings: TemplateStringsArray,
   ...values: TemplateStringValue<Props>[]
 ) {
-  //add typeof function and check for className
   const css = strings.reduce(
-    (result, str, i) => result + str + (values[i] || ""),
+    (result, str, i) => result + str + getValue(values[i]),
     ""
   );
-  const [className, style] = useStyle(css);
+  const className = getClassName(css);
 
   const Component = (props: Props & ElementProps) => (
-    <>
-      <style>{style}</style>
-      <tag
-        {...props}
-        of={InitialComponent}
-        class={`${className} ${props.class ?? ""}`}
-      >
-        {props.children}
-      </tag>
-    </>
+    <tag
+      {...props}
+      of={InitialComponent}
+      class={`${className} ${props.class ?? ""}`}
+    >
+      {props.children}
+    </tag>
   );
 
   Component.className = `.${className}`;
@@ -40,24 +55,18 @@ function generateStyles<Props extends Record<string, any>>(
   return Component;
 }
 
-const styled = <Props extends Record<string, any>>(Markup: ElementName) => {
-  return (
-    strings: TemplateStringsArray,
-    ...values: TemplateStringValue<Props>[]
-  ) => generateStyles<Props>(Markup, strings, ...values);
-};
-export default styled;
+function getValue(v: any) {
+  if (typeof v === "function" && v.className) {
+    return v.className;
+  }
 
-/**
- *
- * @param style
- * @returns [className, style]
- */
-export function useStyle(style: string) {
+  return v || "";
+}
+
+function getClassName(style: string) {
   hasher.update(style);
   const className = "C" + hasher.digest("hex");
-  const populatedStyles = `.${className} {
-    ${style}
-}`;
-  return [className, populatedStyles] as const;
+  stylesStore[className] = style;
+
+  return className;
 }

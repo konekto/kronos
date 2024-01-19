@@ -1,13 +1,11 @@
 import { JobWithPaginatedHistory } from "../jobs";
 import Html, { Children } from "@kitajs/html";
 import Card from "./card";
-import styled from "./styled";
+import { styled } from "./styled";
 import Table from "./table";
 import { formatDate } from "../utils";
-import colors from "tailwindcss/colors";
-import { primaryHue } from "./theme";
-import ActionButton from "./action-button";
 import JobActions from "./job-actions";
+import { greenColor, pinkColor } from "./theme";
 
 type Props = { job: JobWithPaginatedHistory };
 export default function History(props: Props) {
@@ -22,7 +20,7 @@ export default function History(props: Props) {
       <Card
         title={
           <Title>
-            <div>{`${name} Details`}</div>
+            <div>{name}</div>
             <JobActions job={job} />
           </Title>
         }
@@ -60,8 +58,7 @@ export default function History(props: Props) {
                     {`${response_status}`}
                   </ResponseColumn>
                   <td>{formatDate(new Date(triggered_at))}</td>
-                  <ResponseColumn success={!!response_ok}>
-                    Response
+                  <td>
                     <Dialog id={`d${i}`}>
                       <form method="dialog">
                         <CloseButton>
@@ -69,19 +66,19 @@ export default function History(props: Props) {
                         </CloseButton>
                       </form>
 
-                      <code>
+                      <Code>
                         {response_text
                           .replaceAll(">", "&gt;")
                           .replaceAll("<", "&lt;")}
-                      </code>
-                      <form method="dialog">
-                        <button>OK</button>
-                      </form>
+                      </Code>
+                      <ButtonContainer method="dialog">
+                        <Button>OK</Button>
+                      </ButtonContainer>
                     </Dialog>
                     <ShowResponseButton id={`b${i}`}>
                       <ResponseSVG />
                     </ShowResponseButton>
-                  </ResponseColumn>
+                  </td>
                 </tr>
               )
             )}
@@ -111,6 +108,7 @@ const Grid = styled("div")`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 20px;
+  margin-bottom: 20px;
 `;
 
 type GridItemProps = {
@@ -133,7 +131,6 @@ const GridItemContainer = styled("div")`
 
   & h5 {
     text-transform: uppercase;
-    color: ${colors.neutral["600"]};
     margin: 0;
     font-size: 12px;
   }
@@ -147,11 +144,11 @@ const GridItemContainer = styled("div")`
 
 const ResponseColumn = styled<{ success: boolean }>("td")`
   &:is([success]) {
-    color: ${colors.green["500"]};
+    color: ${greenColor};
   }
 
   &:not([success]) {
-    color: ${colors.red["500"]};
+    color: ${pinkColor};
   }
 
   display: flex;
@@ -167,23 +164,23 @@ const ShowResponseButton = styled("button")`
 `;
 
 const Dialog = styled("dialog")`
-  box-shadow: 1px 2px 4px 0px ${colors.neutral["300"]};
+  box-shadow: 1px 2px 4px 0px rgba(black, 0.3);
   border: none;
   border-radius: 22px;
-
   padding: 40px;
-
-  max-width: 75vh;
+  max-width: 75vw;
   max-height: 75vh;
-
-  background-color: ${colors.white};
-
+  background-color: white;
+  opacity: 0;
   font-family: "Inter", sans-serif;
   word-break: break-all;
 
+  &[open] {
+    animation: show 0.8s ease forwards;
+  }
+
   &::backdrop {
-    background: ${colors.neutral["900"]};
-    opacity: 0.75;
+    backdrop-filter: blur(10px) opacity(1);
   }
 
   -ms-overflow-style: none; /* IE and Edge */
@@ -193,16 +190,54 @@ const Dialog = styled("dialog")`
   }
 `;
 
+const Code = styled("code")`
+  display: block;
+  max-height: calc(75vh - 55px);
+  overflow: auto;
+`;
+
+const ButtonContainer = styled("form")`
+  display: flex;
+`;
+
+const Button = styled("button")`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(94, 106, 210, 0.9);
+  color: white;
+  padding: 0 10px;
+  height: 40px;
+  border-radius: 30px;
+  border: none;
+  min-width: 100px;
+  font-weight: 400;
+  margin-top: 30px;
+  margin-left: auto;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(94, 106, 210, 1);
+  }
+`;
+
 const ResponseSVG = () => (
   <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 512 512"
-    width="20px"
-    height="20px"
-    fill={colors[primaryHue]["500"]}
+    viewBox="0 0 24 24"
+    width="20"
+    height="20"
+    stroke="currentColor"
+    stroke-width="2"
+    fill="none"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class="css-i6dzq1"
   >
-    {/* <!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--> */}
-    <path d="M168 80c-13.3 0-24 10.7-24 24V408c0 8.4-1.4 16.5-4.1 24H440c13.3 0 24-10.7 24-24V104c0-13.3-10.7-24-24-24H168zM72 480c-39.8 0-72-32.2-72-72V112C0 98.7 10.7 88 24 88s24 10.7 24 24V408c0 13.3 10.7 24 24 24s24-10.7 24-24V104c0-39.8 32.2-72 72-72H440c39.8 0 72 32.2 72 72V408c0 39.8-32.2 72-72 72H72zM176 136c0-13.3 10.7-24 24-24h96c13.3 0 24 10.7 24 24v80c0 13.3-10.7 24-24 24H200c-13.3 0-24-10.7-24-24V136zm200-24h32c13.3 0 24 10.7 24 24s-10.7 24-24 24H376c-13.3 0-24-10.7-24-24s10.7-24 24-24zm0 80h32c13.3 0 24 10.7 24 24s-10.7 24-24 24H376c-13.3 0-24-10.7-24-24s10.7-24 24-24zM200 272H408c13.3 0 24 10.7 24 24s-10.7 24-24 24H200c-13.3 0-24-10.7-24-24s10.7-24 24-24zm0 80H408c13.3 0 24 10.7 24 24s-10.7 24-24 24H200c-13.3 0-24-10.7-24-24s10.7-24 24-24z" />
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+    <polyline points="14 2 14 8 20 8"></polyline>
+    <line x1="16" y1="13" x2="8" y2="13"></line>
+    <line x1="16" y1="17" x2="8" y2="17"></line>
+    <polyline points="10 9 9 9 8 9"></polyline>
   </svg>
 );
 
@@ -211,21 +246,24 @@ const CloseButton = styled("button")`
   position: fixed;
   top: 15px;
   right: 15px;
-  width: 30px;
-  height: 30px;
+  padding: 10px;
 
   cursor: pointer;
 `;
 
 const CloseSVG = () => (
   <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="30px"
-    height="30px"
-    fill="white"
-    viewBox="0 0 384 512"
+    viewBox="0 0 24 24"
+    width="30"
+    height="30"
+    stroke="white"
+    stroke-width="2"
+    fill="none"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class="css-i6dzq1"
   >
-    {/* <!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--> */}
-    <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
+    <line x1="18" y1="6" x2="6" y2="18"></line>
+    <line x1="6" y1="6" x2="18" y2="18"></line>
   </svg>
 );

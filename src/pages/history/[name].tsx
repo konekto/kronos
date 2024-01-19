@@ -1,17 +1,15 @@
 import Html from "@kitajs/html";
 
-import History from "../../src/components/history";
-import { getJobsWithPaginatedHistory } from "../../src/jobs";
-import { PageProps } from "../../src/types/page";
-import { getFormDataValue, render } from "../../src/utils";
-import { handleJobActions } from "../../src/controllers/job-actions";
+import History from "../../components/history";
+import { getJobsWithPaginatedHistory } from "../../jobs";
+import { PageProps } from "../../types/page";
+import { getFormDataValue, render } from "../../utils";
+import { handleJobActions } from "../../controllers/job-actions";
 import { MatchedRoute } from "bun";
 
 export default async function HistoryPage({ request, route }: PageProps) {
   const queryPage = route.query.page ?? "1";
   const page = Number(queryPage);
-
-  console.log(page);
 
   if (!Number.isInteger(page)) {
     return new Response("Invalid Page", { status: 400 });

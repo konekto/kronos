@@ -1,5 +1,5 @@
 import Html, { Children } from "@kitajs/html";
-import styled from "./styled";
+import { styled } from "./styled";
 
 type Input = {
   name: string;
@@ -45,6 +45,5 @@ const Button = styled("input")`
 
   z-index: 1;
   opacity: 0;
-
   cursor: pointer !important;
 `;

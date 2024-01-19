@@ -1,8 +1,6 @@
 import Html from "@kitajs/html";
-import { ScheduledJob } from "../scheduler";
-import { colors, primaryHue } from "./theme";
-import ActionButton from "./action-button";
-import styled from "./styled";
+import { greenColor, pinkColor } from "./theme";
+import { styled } from "./styled";
 import { formatDate, formatLuxonDate } from "../utils";
 import Table from "./table";
 import { JobWithHistory } from "../jobs";
@@ -15,7 +13,6 @@ type Props = {
 };
 
 export default function Jobs({ jobs, ...rest }: Props) {
-  const X = <div></div>;
   return (
     <Card title="Webhooks">
       <Table>
@@ -31,7 +28,7 @@ export default function Jobs({ jobs, ...rest }: Props) {
         </thead>
         <tbody>
           {jobs.map((job) => (
-            <tr>
+            <Tr onclick={`location = "/history/${encodeURI(job.name)}"`}>
               <td>{job.name}</td>
               <td>{job.cronExpression}</td>
               <td>{formatLuxonDate(job.cronJob.nextDate())}</td>
@@ -42,7 +39,7 @@ export default function Jobs({ jobs, ...rest }: Props) {
               <td>
                 <JobActions job={job} />
               </td>
-            </tr>
+            </Tr>
           ))}
         </tbody>
       </Table>
@@ -52,11 +49,11 @@ export default function Jobs({ jobs, ...rest }: Props) {
 
 const StatusColumn = styled("td")`
   &:is([running]) {
-    color: ${colors.green["500"]};
+    color: ${greenColor};
   }
 
   &:not([running]) {
-    color: ${colors.red["500"]};
+    color: ${pinkColor};
   }
 `;
 
@@ -77,10 +74,14 @@ const LastTrigger = ({ history }: LastTriggerProps) => {
 
 const TriggerColumn = styled<{ success: boolean }>("td")`
   &:is([success]) {
-    color: ${colors.green["500"]};
+    color: ${greenColor};
   }
 
   &:not([success]) {
-    color: ${colors.red["500"]};
+    color: ${pinkColor};
   }
+`;
+
+const Tr = styled("tr")`
+  cursor: pointer;
 `;
