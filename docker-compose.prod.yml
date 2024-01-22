@@ -1,0 +1,14 @@
+version: "3.8"
+services:
+  cron-bun:
+    image: cron-bun:latest
+    ports:
+      - 3000:3000
+    volumes:
+      - ./jobs:/srv/app/jobs
+      - db:/srv/app/db
+    env_file:
+      - .env
+
+volumes:
+  db:

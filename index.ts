@@ -13,7 +13,6 @@ const router = new Bun.FileSystemRouter({
 const server = Bun.serve({
   async fetch(req) {
     let route = router.match(req);
-    console.log(route);
     if (!route) {
       return new Response("Not found", { status: 404 });
     }

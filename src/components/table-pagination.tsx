@@ -5,9 +5,13 @@ import { grayColor, pinkColor } from "./theme";
 
 type Props = Pagination;
 export default function TablePagination(props: Props) {
-  const { page } = props;
+  const { page, totalPages } = props;
+
+  if (totalPages === 1) {
+    return null;
+  }
+
   const { pages, currentScreen, lastScreen } = generatePagesArray(props);
-  console.log({ pages, currentScreen, lastScreen });
   return (
     <Container>
       {currentScreen > 0 && (
@@ -81,12 +85,8 @@ const navigablePages = 7;
 function generatePagesArray(options: Pagination) {
   const { page, totalPages } = options;
 
-  console.log(page, totalPages);
-
   const currentScreen = Math.floor(page / navigablePages);
   const lastScreen = Math.floor(totalPages / navigablePages);
-
-  console.log({ page, totalPages, currentScreen, lastScreen });
 
   let pages;
 

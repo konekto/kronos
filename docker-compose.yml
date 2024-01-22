@@ -1,0 +1,11 @@
+version: "3.8"
+services:
+  cron-bun:
+    build: .
+    command: sh -c "bun run start:dev"
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/srv/app
+    env_file:
+      - .env

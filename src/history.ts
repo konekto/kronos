@@ -8,7 +8,7 @@ let initialized = false;
 
 export let db: Database;
 
-export function init(path = "history.sqlite") {
+export function init(path = "db/history.sqlite") {
   if (initialized) return;
 
   const d = new Database(path);

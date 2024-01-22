@@ -4,7 +4,6 @@ import { DateTime } from "luxon";
 import { MatchedRoute } from "bun";
 export function render(jsx: any, route: MatchedRoute) {
   const { pathname } = route;
-  console.log(pathname);
   return new Response(
     "<!doctype html>" + <Layout route={route}>{jsx}</Layout>,
     {
