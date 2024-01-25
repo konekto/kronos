@@ -25,7 +25,7 @@ jobs:
           context: .
           push: true
           target: production
-          tags: konekto/kronos:${{env.GITHUB_SHA}}
+          tags: konekto/kronos:${{github.sha}}
       - name: Build and push tagged latest
         uses: docker/build-push-action@v5
         with:
