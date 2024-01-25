@@ -1,0 +1,24 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  buildAndPush:
+    
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_TAG: konekto/kronos:$(date +%s)
+    steps:
+    - uses: actions/checkout@v3
+    - name: Login to docker hub
+      run: docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
+    - name: Build the Docker image
+      run: docker build . -t $IMAGE_TAG -t konekto/kronos:latest
+    - name: Push the Docker image
+      run: docker push . -t $IMAGE_TAG -t konekto/kronos:latest
+      
