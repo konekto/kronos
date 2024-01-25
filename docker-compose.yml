@@ -1,6 +1,6 @@
 version: "3.8"
 services:
-  cron-bun:
+  kronos:
     build: .
     command: sh -c "bun run start:dev"
     ports:

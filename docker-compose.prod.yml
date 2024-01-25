@@ -1,7 +1,7 @@
 version: "3.8"
 services:
-  cron-bun:
-    image: cron-bun:latest
+  kronos:
+    image: konekto/kronos:latest
     ports:
       - 3000:3000
     volumes:

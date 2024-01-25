@@ -1,15 +1,18 @@
-# cron-bun
+# kronos
 
-To install dependencies:
+Kronos enables you to trigger https requests at specific times
+It uses the cron syntax for the timings
 
-```bash
-bun install
+Jobs are configured like this
+
 ```
+NAME test get
+CRON * * * * *
+GET https://konek.to
 
-To run:
 
-```bash
-bun run index.ts
+NAME test post
+CRON * * * * *
+POST https://konek.to
+
 ```
-
-This project was created using `bun init` in bun v1.0.2. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.

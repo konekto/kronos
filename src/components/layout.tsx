@@ -15,14 +15,14 @@ export default function Layout(props: LayoutProps) {
   return (
     <>
       <head>
-        <title>Cron</title>
+        <title>kronos</title>
         <style>{globalStyles}</style>
         <Styles />
       </head>
       <body>
         <Header>
           <a href="/">
-            <em>Cron</em>
+            <em>Kronos</em>
           </a>
         </Header>
         <Main>{children}</Main>
