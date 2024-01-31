@@ -4,7 +4,7 @@ import { parseString } from "./parser";
 const JOBS = `
 NAME post with token
 CRON * * * * *
-POST $APP_URL/api/post?token=$TOKEN
+POST $\{APP_URL\}/api/post?token=$TOKEN
 Content-Type: application/json
 
 {

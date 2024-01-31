@@ -11,10 +11,13 @@ export function parseString(fileContent: string, variables = {}) {
   return jobs.map((job) => createJob(job));
 }
 
-function inject(fileContent: string, variables: Record<string, any>) {
+export function inject(fileContent: string, variables: Record<string, any>) {
   let res = fileContent;
   Object.keys(variables).map(
-    (v) => (res = res.replaceAll(`\$${v}`, variables[v]))
+    (v) =>
+      (res = res
+        .replaceAll(`\$${v}`, variables[v])
+        .replaceAll(`\$\{${v}\}`, variables[v]))
   );
   return res;
 }
